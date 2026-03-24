@@ -72,15 +72,21 @@ NodeMCU → OLED → Display Count
 
 ### 🔧 Hardware Setup
 
-![Setup](images/setup.jpg)
+<p align="center">
+  <img src="images/setup.jpeg" width="700" height="400"/>
+</p>
 
 ### 🔌 Circuit Diagram
 
-![Circuit](images/circuit.png)
+<p align="center">
+  <img src="images/circuit.png" width="700" height="400"/>
+</p>
 
 ### 📊 Output
 
-![Output](images/output.png)
+<p align="center">
+  <img src="images/output.jpeg" width="700" height="400"/>
+</p>
 
 ---
 
