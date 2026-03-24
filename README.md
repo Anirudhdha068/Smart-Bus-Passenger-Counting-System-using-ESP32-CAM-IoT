@@ -1,4 +1,4 @@
-<h1 align="center">Smart Bus Passenger Counting System</h1>
+<h1 align="center">Smart Bus Passenger Counting System using ESP32-CAM IoT</h1>
 
 <p align="center">
   <b>IoT + AI Powered Real-Time Passenger Monitoring System</b>
@@ -21,9 +21,9 @@
 
 ## 🧠 Overview
 
-The **Smart Bus Passenger Counting System** is a real-time embedded IoT solution designed to monitor passenger occupancy inside buses using **sensor fusion and computer vision**.
+The **Smart Bus Passenger Counting System** is a real-time IoT-based solution designed to monitor passenger occupancy inside buses using **sensor fusion and computer vision**.
 
-This system combines:
+### 🔹 This system combines:
 
 * 📡 IoT-based entry/exit tracking
 * 📷 Real-time video streaming
@@ -72,47 +72,80 @@ NodeMCU → OLED → Display Count
 
 ### 🔧 Hardware Setup
 
-![Setup](assets/images/setup.jpg)
+![Setup](images/setup.jpg)
 
 ### 🔌 Circuit Diagram
 
-![Circuit](assets/images/circuit.png)
+![Circuit](images/circuit.png)
 
 ### 📊 Output
 
-![Output](assets/images/output.png)
+![Output](images/output.png)
 
 ---
 
 ## ⚙️ Working Logic
 
-1. **Entry Detection**
-
-   * Ultrasonic Sensor triggers → Count++
-
-2. **Exit Detection**
-
-   * Second sensor triggers → Count--
-
-3. **Video Streaming**
-
-   * ESP32-CAM streams live feed over WiFi
-
-4. **Face Detection**
-
-   * Python processes frames using OpenCV
-
-5. **Display**
-
-   * OLED shows real-time passenger count
+1. Entry detected → Count increases
+2. Exit detected → Count decreases
+3. ESP32-CAM streams live video
+4. Python processes frames using OpenCV
+5. OLED displays passenger count
 
 ---
 
 ## ⚠️ Design Insight
 
-> The system uses **sensor-based counting for accuracy** and **vision-based detection for monitoring**, ensuring reliability in real-world conditions.
+> Ultrasonic sensors provide accurate counting, while camera detection is used for monitoring and verification.
 
 ---
+
+---
+
+## 🔌 Hardware Connections
+
+### 📍 Ultrasonic Sensor 1 (ENTRY)
+
+| Pin  | NodeMCU                     |
+| ---- | --------------------------- |
+| VCC  | Vin (5V)                    |
+| GND  | GND                         |
+| TRIG | D5                          |
+| ECHO | D6 (via voltage divider ⚠️) |
+
+---
+
+### 📍 Ultrasonic Sensor 2 (EXIT)
+
+| Pin  | NodeMCU                     |
+| ---- | --------------------------- |
+| VCC  | Vin (5V)                    |
+| GND  | GND                         |
+| TRIG | D7                          |
+| ECHO | D8 (via voltage divider ⚠️) |
+
+---
+
+### 📍 OLED Display (I2C)
+
+| Pin | NodeMCU |
+| --- | ------- |
+| VCC | 3.3V    |
+| GND | GND     |
+| SDA | D2      |
+| SCL | D1      |
+
+---
+
+## ⚠️ Important Notes (Connections)
+
+* ⚠️ **Ultrasonic ECHO pin gives 5V**, NodeMCU works on 3.3V → use **voltage divider**
+* Ensure **common GND** for all components
+* Use stable **5V power supply** for sensors
+* Keep sensors aligned properly for accurate detection
+
+---
+
 
 ## 💻 Setup & Installation
 
@@ -120,12 +153,12 @@ NodeMCU → OLED → Display Count
 
 ```bash
 git clone https://github.com/Anirudhdha068/Smart-Bus-Passenger-Counting-System-using-ESP32-CAM-IoT.git
-cd Smart-Bus-Passenger-Counting-System
+cd Smart-Bus-Passenger-Counting-System-using-ESP32-CAM-IoT
 ```
 
 ---
 
-## 🐍 Python Environment (Best Practice)
+## 🐍 Python Virtual Environment (Recommended)
 
 ### Create Virtual Environment
 
@@ -157,19 +190,111 @@ pip install -r requirements.txt
 
 ---
 
-### Run Application
+### Run Python Script
 
 ```bash
-python software/python/face_detection.py
+python Python/face_detection.py
 ```
 
 ---
 
-## 📡 ESP32-CAM Setup
+## 📁 Project Structure & Code Guide
 
-* Upload firmware using Arduino IDE
-* Connect to WiFi
-* Open IP in browser
+```plaintext
+ESP32-CAM/        → Camera streaming code  
+NodeMCU/          → Passenger counting (Ultrasonic + OLED)  
+Python/           → Face detection using OpenCV  
+images/           → Project images  
+videos/           → Demo video (optional)  
+```
+
+---
+
+## ⚙️ Code Usage & Upload Guide
+
+### 🔹 ESP32-CAM Code
+
+📂 Location: ESP32-CAM/esp32_stream.ino
+
+🛠️ Steps:
+
+1. Open Arduino IDE
+2. Install ESP32 board
+3. Select **AI Thinker ESP32-CAM**
+4. Enter WiFi credentials
+5. Upload code
+
+📡 Output:
+
+* Open Serial Monitor
+* Copy IP address
+* Open in browser
+  http://<ESP32_IP>
+
+---
+
+### 🔹 NodeMCU Code
+
+📂 Location: NodeMCU/passenger_counter.ino
+
+🛠️ Steps:
+
+1. Open Arduino IDE
+2. Select **NodeMCU 1.0 (ESP8266)**
+3. Connect via USB
+4. Upload code
+
+📊 Output:
+
+* OLED displays passenger count
+
+---
+
+### 🔹 Python Code
+
+📂 Location: Python/face_detection.py
+
+🛠️ Steps:
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Update IP:
+
+```python
+ESP32_CAM_URL = "http://192.168.x.x/stream"
+```
+
+Run:
+
+```bash
+python Python/face_detection.py
+```
+
+📷 Output:
+
+* Live camera feed with face detection
+
+---
+
+## 🔗 System Flow
+
+* ESP32-CAM → streams video
+* Python → detects faces
+* Ultrasonic sensors → count passengers
+* NodeMCU → updates OLED
+
+---
+
+## ⚠️ Important Notes
+
+* Use same WiFi network for ESP32 and Laptop
+* Ensure correct IP address in Python code
+* Ultrasonic sensors must be placed properly
+* Camera is for monitoring, sensors handle actual counting
 
 ---
 
@@ -183,47 +308,43 @@ python software/python/face_detection.py
 
 ## 🎥 Demo
 
-📁 Add demo video inside:
-
-```plaintext
-assets/videos/demo.mp4
-```
+Place demo video here:
+videos/demo.mp4
 
 ---
 
 ## 🚀 Future Enhancements
 
-* YOLOv8-based detection
-* Cloud dashboard (Firebase)
-* Mobile application
-* GPS integration
-* Real-time analytics
+* YOLO-based detection
+* Cloud dashboard
+* Mobile app
+* GPS tracking
 
 ---
 
 ## 👨‍💻 Author
 
-**Anirudhdha Poriya**<br>
-🚀 IoT Developer | Embedded Systems Enthusiast
+**Anirudhdha Poriya**
+🚀 IoT Developer
 
 ---
 
 ## 🤝 Contributions
 
 Contributions are welcome!
-Feel free to fork and improve the system.
+Feel free to fork and improve the project.
 
 ---
 
 ## ⭐ Support
 
-If this project helped you:
+If you like this project:
 
 ⭐ Star this repository
-📢 Share with the community
+🔁 Share with others
 
 ---
 
 ## 📜 License
 
-Licensed under the MIT License.
+MIT License
